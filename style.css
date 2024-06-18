@@ -98,19 +98,19 @@ div {
 }
 
 .one {
-  color: #e76346;
+  color: white;
 }
 
 .two {
-  color: #4199d3;
+  color: #f707ff;
 }
 
 .three {
-  color: #57da59;
+  color: #06fd0a;
 }
 
 .four {
-  color: #bb41d3;
+  color: #090909;
 }
 
 @media (max-width: 768px) {
