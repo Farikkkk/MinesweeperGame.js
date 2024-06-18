@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let timer;
   let timeElapsed = 0;
   let timerStarted = false;
+  let lastTouch = 0;
 
   function createBoard() {
     flagsLeft.innerHTML = bombAmount;
@@ -42,21 +43,32 @@ document.addEventListener("DOMContentLoaded", () => {
         addFlag(square);
       });
 
-      square.addEventListener("dblclick", () => {
-        if (square.classList.contains("checked")) {
-          return; // Если ячейка уже открыта, не делаем ничего
-        }
-        if (square.classList.contains("flag")) {
-          // Если на ячейке уже есть флаг, убираем его
-          square.classList.remove("flag");
-          flags--;
-          flagsLeft.innerHTML = bombAmount - flags;
-        } else {
-          // Если на ячейке нет флага, ставим его
-          square.classList.add("flag");
-          flags++;
-          flagsLeft.innerHTML = bombAmount - flags;
-          checkForWin();
+      square.addEventListener("touchstart", (event) => {
+        const now = Date.now();
+        const delta = now - lastTouch;
+        lastTouch = now;
+
+        if (delta < 300) {
+          event.preventDefault(); // Предотвратить стандартное поведение
+          // Обработать двойное касание здесь
+          if (square.classList.contains("checked")) {
+            return; // Если ячейка уже открыта, не делаем ничего
+          }
+
+          if (square.classList.contains("flag")) {
+            // Если на ячейке уже есть флаг, убираем его
+            square.classList.remove("flag");
+            flags--;
+            square.innerHTML = "";
+            flagsLeft.innerHTML = bombAmount - flags;
+          } else {
+            // Если на ячейке нет флага, ставим его
+            square.classList.add("flag");
+            flags++;
+            flagsLeft.innerHTML = bombAmount - flags;
+            square.innerHTML = "🚩";
+            checkForWin();
+          }
         }
       });
     }
